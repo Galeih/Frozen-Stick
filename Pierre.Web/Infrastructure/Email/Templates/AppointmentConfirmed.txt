@@ -1,0 +1,10 @@
+Bonjour {RequesterName},
+
+Votre rendez-vous du {Date} à {StartTime} a été confirmé.
+
+Nous vous recevrons avec plaisir à l'adresse indiquée sur notre site.
+
+Si vous avez des questions, n'hésitez pas à nous contacter.
+
+Cordialement,
+Pierre Diététicien

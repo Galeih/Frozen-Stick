@@ -1,0 +1,76 @@
+@page
+@{
+    ViewData["Title"] = "Prestations";
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>Mes prestations</h1>
+        <p class="text-muted mt-2" style="font-size: 1.05rem;">Un accompagnement adapté à chaque situation</p>
+    </div>
+</div>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card p-4">
+                    <span class="service-icon">🥗</span>
+                    <h5 class="fw-bold">Consultation individuelle</h5>
+                    <p class="text-muted small">Bilan nutritionnel complet, définition d'objectifs personnalisés et suivi régulier pour vous accompagner vers une alimentation équilibrée.</p>
+                    <p class="small"><strong>Durée :</strong> 1h</p>
+                    <p class="small"><strong>Tarif :</strong> 60€</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card p-4">
+                    <span class="service-icon">📋</span>
+                    <h5 class="fw-bold">Bilan diététique</h5>
+                    <p class="text-muted small">Analyse approfondie de vos habitudes alimentaires, de vos besoins nutritionnels et élaboration d'un plan personnalisé.</p>
+                    <p class="small"><strong>Durée :</strong> 1h30</p>
+                    <p class="small"><strong>Tarif :</strong> 80€</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card p-4">
+                    <span class="service-icon">👨‍👩‍👧‍👦</span>
+                    <h5 class="fw-bold">Accompagnement familial</h5>
+                    <p class="text-muted small">Conseils adaptés à toute la famille pour adopter de bonnes habitudes alimentaires ensemble, sans frustration.</p>
+                    <p class="small"><strong>Durée :</strong> 1h15</p>
+                    <p class="small"><strong>Tarif :</strong> 75€</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card p-4">
+                    <span class="service-icon">🍳</span>
+                    <h5 class="fw-bold">Atelier cuisine</h5>
+                    <p class="text-muted small">Apprenez à cuisiner équilibré avec des recettes simples, savoureuses et de saison. Atelier en petit groupe.</p>
+                    <p class="small"><strong>Durée :</strong> 2h</p>
+                    <p class="small"><strong>Tarif :</strong> 35€/personne</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card p-4">
+                    <span class="service-icon">💻</span>
+                    <h5 class="fw-bold">Suivi en ligne</h5>
+                    <p class="text-muted small">Consultation à distance par visioconférence pour un suivi flexible, où que vous soyez.</p>
+                    <p class="small"><strong>Durée :</strong> 45min</p>
+                    <p class="small"><strong>Tarif :</strong> 50€</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card service-card p-4">
+                    <span class="service-icon">📊</span>
+                    <h5 class="fw-bold">Suivi sportif</h5>
+                    <p class="text-muted small">Accompagnement nutritionnel pour sportifs : optimisation des performances et récupération.</p>
+                    <p class="small"><strong>Durée :</strong> 1h</p>
+                    <p class="small"><strong>Tarif :</strong> 65€</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a asp-page="/Public/Booking/Request" class="btn btn-accent btn-lg rounded-pill px-5">Prendre rendez-vous</a>
+        </div>
+    </div>
+</section>

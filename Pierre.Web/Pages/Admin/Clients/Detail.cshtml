@@ -1,0 +1,159 @@
+@page "{id:guid}"
+@model Pierre.Web.Pages.Admin.Clients.DetailModel
+@{
+    ViewData["Title"] = "Fiche client";
+}
+
+<h1>Fiche client</h1>
+
+@if (TempData["Success"] is string successMsg)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @successMsg
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>@Model.Client.FirstName @Model.Client.LastName</span>
+        @if (Model.Client.IsArchived)
+        {
+            <span class="badge bg-secondary">Archivé</span>
+        }
+        else
+        {
+            <span class="badge bg-success">Actif</span>
+        }
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Coordonnées</h5>
+                <p>
+                    @if (!string.IsNullOrEmpty(Model.Client.Email))
+                    {
+                        <strong>Email :</strong> <a href="mailto:@Model.Client.Email">@Model.Client.Email</a><br />
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Client.Phone))
+                    {
+                        <strong>Téléphone :</strong> <a href="tel:@Model.Client.Phone">@Model.Client.Phone</a><br />
+                    }
+                    @if (Model.Client.BirthDate.HasValue)
+                    {
+                        <strong>Date de naissance :</strong> @Model.Client.BirthDate.Value.ToString("dd/MM/yyyy")<br />
+                    }
+                    <strong>Client depuis le :</strong> @Model.Client.CreatedAt.ToString("dd/MM/yyyy")<br />
+                    @if (Model.Client.UpdatedAt != Model.Client.CreatedAt)
+                    {
+                        <strong>Dernière modification :</strong> @Model.Client.UpdatedAt.ToString("g")
+                    }
+                </p>
+            </div>
+            <div class="col-md-6">
+                <h5>Statistiques</h5>
+                <p>
+                    <strong>Rendez-vous :</strong> @Model.Client.AppointmentCount<br />
+                    <strong>Notes de consultation :</strong> @Model.Client.ConsultationNotes.Count
+                </p>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Client.Notes))
+        {
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h5>Notes</h5>
+                    <p>@Model.Client.Notes</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card-footer">
+        <a asp-page="Edit" asp-route-id="@Model.Client.Id" class="btn btn-primary">Modifier</a>
+
+        @if (!Model.Client.IsArchived)
+        {
+            <form method="post" asp-page-handler="Archive" class="d-inline" onsubmit="return confirm('Archiver ce client ? Il sera masqué par défaut dans la liste.');">
+                <button type="submit" class="btn btn-warning">Archiver</button>
+            </form>
+        }
+    </div>
+</div>
+
+@if (Model.Client.Appointments.Count > 0)
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Historique des rendez-vous (@Model.Client.Appointments.Count)</h5>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Horaire</th>
+                        <th>Statut</th>
+                        <th>Demandé le</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var appt in Model.Client.Appointments)
+                    {
+                        <tr>
+                            <td>@appt.Date.ToString("dd/MM/yyyy")</td>
+                            <td>@appt.StartTime.ToString("HH\\hmm") - @appt.EndTime.ToString("HH\\hmm")</td>
+                            <td>
+                                <span class="badge @(appt.Status switch
+                                {
+                                    "Accepted" => "bg-success",
+                                    "Pending" => "bg-warning text-dark",
+                                    "Refused" => "bg-secondary",
+                                    _ => "bg-info"
+                                })">@appt.Status</span>
+                            </td>
+                            <td>@appt.CreatedAt.ToString("g")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@if (Model.Client.ConsultationNotes.Count > 0)
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Notes de consultation (@Model.Client.ConsultationNotes.Count)</h5>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Contenu</th>
+                        <th>Recommandations</th>
+                        <th>Poids</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var note in Model.Client.ConsultationNotes)
+                    {
+                        <tr>
+                            <td>@note.Date.ToString("dd/MM/yyyy")</td>
+                            <td>@note.Content</td>
+                            <td>@(note.Recommendations ?? "-")</td>
+                            <td>@(note.Weight.HasValue ? note.Weight.Value.ToString("F1") + " kg" : "-")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<div>
+    <a asp-page="Index" class="btn btn-outline-secondary">Retour à la liste</a>
+</div>

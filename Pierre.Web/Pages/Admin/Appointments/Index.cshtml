@@ -1,0 +1,95 @@
+@page
+@model Pierre.Web.Pages.Admin.Appointments.IndexModel
+@{
+    ViewData["Title"] = "Gestion des rendez-vous";
+}
+
+<h1>Gestion des rendez-vous</h1>
+
+@if (TempData["Success"] is string successMsg)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @successMsg
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+        <a asp-page="Index" asp-route-status="" class="nav-link @(string.IsNullOrEmpty(Model.StatusFilter) ? "active" : "")">Toutes</a>
+    </li>
+    <li class="nav-item">
+        <a asp-page="Index" asp-route-status="Pending" class="nav-link @(Model.StatusFilter == "Pending" ? "active" : "")">En attente</a>
+    </li>
+    <li class="nav-item">
+        <a asp-page="Index" asp-route-status="Accepted" class="nav-link @(Model.StatusFilter == "Accepted" ? "active" : "")">Acceptées</a>
+    </li>
+    <li class="nav-item">
+        <a asp-page="Index" asp-route-status="Refused" class="nav-link @(Model.StatusFilter == "Refused" ? "active" : "")">Refusées</a>
+    </li>
+</ul>
+
+@if (Model.Appointments.Count == 0)
+{
+    <p class="text-muted">Aucun rendez-vous trouvé.</p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Demandeur</th>
+                <th>Date</th>
+                <th>Horaire</th>
+                <th>Statut</th>
+                <th>Client lié</th>
+                <th>Demandé le</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var appt in Model.Appointments)
+            {
+                <tr>
+                    <td>
+                        <a asp-page="Detail" asp-route-id="@appt.Id">@appt.RequesterName</a>
+                    </td>
+                    <td>@appt.Date.ToString("dd/MM/yyyy")</td>
+                    <td>@appt.StartTime.ToString("HH\\hmm")</td>
+                    <td>
+                        @switch (appt.Status)
+                        {
+                            case "Pending":
+                                <span class="badge bg-warning text-dark">@appt.StatusDisplay</span>
+                                break;
+                            case "Accepted":
+                                <span class="badge bg-success">@appt.StatusDisplay</span>
+                                break;
+                            case "Refused":
+                                <span class="badge bg-secondary">@appt.StatusDisplay</span>
+                                break;
+                            default:
+                                <span class="badge bg-info">@appt.StatusDisplay</span>
+                                break;
+                        }
+                    </td>
+                    <td>@(appt.ClientName ?? "-")</td>
+                    <td>@appt.CreatedAt.ToString("g")</td>
+                    <td>
+                        <a asp-page="Detail" asp-route-id="@appt.Id" class="btn btn-sm btn-outline-primary">Détail</a>
+
+                        @if (appt.Status == "Pending")
+                        {
+                            <form method="post" asp-page-handler="Accept" asp-route-id="@appt.Id" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-success">Accepter</button>
+                            </form>
+                            <form method="post" asp-page-handler="Refuse" asp-route-id="@appt.Id" class="d-inline" onsubmit="return confirm('Refuser cette demande ?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Refuser</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

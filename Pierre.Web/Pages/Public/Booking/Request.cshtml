@@ -1,0 +1,143 @@
+@page "/rendez-vous/demande"
+@model Pierre.Web.Pages.Public.Booking.RequestModel
+@{
+    ViewData["Title"] = "Demande de rendez-vous";
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>Demande de rendez-vous</h1>
+        <p>Choisissez un créneau et remplissez vos coordonnées</p>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        @if (TempData["RequestSuccess"] is true)
+        {
+            <div class="confirmation-card">
+                <div class="confirmation-icon">&#10003;</div>
+                <h2>Votre demande a bien été envoyée !</h2>
+                <p>Je vous recontacterai dans les plus brefs délais pour confirmer le rendez-vous.</p>
+                <p>Vous recevrez un email de confirmation une fois le créneau validé.</p>
+                <a href="/" class="btn btn-primary-green" style="margin-top: 1.5rem;">Retour à l'accueil</a>
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+        {
+            <div class="alert alert-error">
+                <p>@TempData["ErrorMessage"]</p>
+            </div>
+            <a href="/rendez-vous/demande" class="btn btn-primary-green">Réessayer</a>
+        }
+        else if (!Model.AvailableSlots.Any())
+        {
+            <div class="empty-state">
+                <h2>Aucun créneau disponible</h2>
+                <p>
+                    Il n'y a malheureusement aucun créneau de disponible dans les 4 prochaines semaines.
+                    Veuillez revenir ultérieurement ou <a href="/Public/Contact">me contacter</a> directement.
+                </p>
+                <a href="/" class="btn btn-primary-green" style="margin-top: 1rem;">Retour à l'accueil</a>
+            </div>
+        }
+        else
+        {
+            <form method="post" class="booking-form">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-error" role="alert"></div>
+
+                @* Step 1: Slot selection *@
+                <div class="step">
+                    <h2 class="step-title">
+                        <span class="step-number">1</span>
+                        Choisissez votre créneau
+                    </h2>
+
+                    <div class="slots-grid">
+                        @{
+                            var groupedSlots = Model.AvailableSlots
+                                .GroupBy(s => s.Date)
+                                .OrderBy(g => g.Key);
+                        }
+
+                        @foreach (var group in groupedSlots)
+                        {
+                            <div class="date-group">
+                                <h3 class="date-label">@group.Key.ToString("dddd dd MMMM yyyy")</h3>
+                                <div class="slot-list">
+                                    @foreach (var slot in group)
+                                    {
+                                        <label class="slot-radio">
+                                            <input type="radio"
+                                                   asp-for="Input.SlotId"
+                                                   value="@slot.SlotId" />
+                                            <span class="slot-time">@slot.StartTime.ToString("HH\\hmm") - @slot.EndTime.ToString("HH\\hmm")</span>
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                @* Step 2: Personal info *@
+                <div class="step">
+                    <h2 class="step-title">
+                        <span class="step-number">2</span>
+                        Vos coordonnées
+                    </h2>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label asp-for="Input.LastName">Nom</label>
+                            <input asp-for="Input.LastName" class="form-control" placeholder="Votre nom" />
+                            <span asp-validation-for="Input.LastName" class="field-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Input.FirstName">Prénom</label>
+                            <input asp-for="Input.FirstName" class="form-control" placeholder="Votre prénom" />
+                            <span asp-validation-for="Input.FirstName" class="field-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Input.Email">Email</label>
+                            <input asp-for="Input.Email" class="form-control" placeholder="vous@exemple.fr" />
+                            <span asp-validation-for="Input.Email" class="field-error"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Input.Phone">Téléphone</label>
+                            <input asp-for="Input.Phone" class="form-control" placeholder="06 12 34 56 78" />
+                            <span asp-validation-for="Input.Phone" class="field-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <label asp-for="Input.Message">Message (facultatif)</label>
+                        <textarea asp-for="Input.Message" class="form-control" rows="4" placeholder="Indiquez brièvement l'objet de votre consultation..."></textarea>
+                        <span asp-validation-for="Input.Message" class="field-error"></span>
+                    </div>
+
+                    <p class="form-note">
+                        <small>Les champs marqués d'un astérisque (*) sont obligatoires.</small>
+                    </p>
+
+                    <p class="form-note">
+                        <small>Vous devez fournir au moins un email ou un numéro de téléphone.</small>
+                    </p>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-accent btn-lg">Envoyer ma demande</button>
+                </div>
+            </form>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

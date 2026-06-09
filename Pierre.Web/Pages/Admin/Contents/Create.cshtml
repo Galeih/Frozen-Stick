@@ -1,0 +1,48 @@
+@page
+@model Pierre.Web.Pages.Admin.Contents.CreateModel
+@{
+    ViewData["Title"] = "Nouveau contenu";
+}
+
+<h1>Nouveau contenu</h1>
+
+<form method="post" class="mt-4">
+    <div class="mb-3">
+        <label asp-for="Input.Title" class="form-label">Titre</label>
+        <input asp-for="Input.Title" class="form-control" />
+        <span asp-validation-for="Input.Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Type" class="form-label">Type</label>
+        <select asp-for="Input.Type" asp-items="Model.TypeOptions" class="form-select"></select>
+        <span asp-validation-for="Input.Type" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Statut</label>
+        <div>
+            @foreach (var status in Model.StatusOptions)
+            {
+                <div class="form-check form-check-inline">
+                    <input type="radio" asp-for="Input.Status" value="@status.Value" class="form-check-input" id="status_@status.Value" />
+                    <label class="form-check-label" for="status_@status.Value">@status.Text</label>
+                </div>
+            }
+        </div>
+        <span asp-validation-for="Input.Status" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Body" class="form-label">Contenu</label>
+        <textarea asp-for="Input.Body" class="form-control" rows="15"></textarea>
+        <span asp-validation-for="Input.Body" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-page="Index" class="btn btn-outline-secondary">Annuler</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

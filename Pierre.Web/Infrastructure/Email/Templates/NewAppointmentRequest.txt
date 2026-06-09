@@ -1,0 +1,15 @@
+Nouvelle demande de rendez-vous
+
+Un visiteur a demandé un rendez-vous sur le site.
+
+Détails de la demande :
+  Nom : {RequesterName}
+  Email : {RequesterEmail}
+  Téléphone : {RequesterPhone}
+  Message : {Message}
+
+Créneau demandé :
+  Date : {Date}
+  Horaire : {StartTime} - {EndTime}
+
+Connectez-vous à l'interface d'administration pour accepter ou refuser cette demande.

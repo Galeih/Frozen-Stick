@@ -1,0 +1,8 @@
+Bonjour {RequesterName},
+
+Nous sommes au regret de vous informer que votre rendez-vous du {Date} à {StartTime} n'a pas pu être accepté.
+
+Vous pouvez consulter notre planning en ligne pour choisir un autre créneau.
+
+Cordialement,
+Pierre Diététicien

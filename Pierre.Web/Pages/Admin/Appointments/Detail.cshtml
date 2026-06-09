@@ -1,0 +1,99 @@
+@page "{id:guid}"
+@model Pierre.Web.Pages.Admin.Appointments.DetailModel
+@{
+    ViewData["Title"] = "Détail du rendez-vous";
+}
+
+<h1>Détail du rendez-vous</h1>
+
+@if (TempData["Success"] is string successMsg)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @successMsg
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>@Model.Appointment.RequesterName</span>
+        <span class="badge @(Model.Appointment.Status switch
+        {
+            "Pending" => "bg-warning text-dark",
+            "Accepted" => "bg-success",
+            "Refused" => "bg-secondary",
+            _ => "bg-info"
+        })">@Model.Appointment.StatusDisplay</span>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Créneau</h5>
+                <p>
+                    <strong>Date :</strong> @Model.Appointment.Date.ToString("dddd dd MMMM yyyy")<br />
+                    <strong>Horaire :</strong> @Model.Appointment.StartTime.ToString("HH\\hmm") - @Model.Appointment.EndTime.ToString("HH\\hmm")
+                </p>
+            </div>
+            <div class="col-md-6">
+                <h5>Coordonnées du demandeur</h5>
+                <p>
+                    <strong>Nom :</strong> @Model.Appointment.RequesterName<br />
+                    @if (!string.IsNullOrEmpty(Model.Appointment.RequesterEmail))
+                    {
+                        <strong>Email :</strong> <a href="mailto:@Model.Appointment.RequesterEmail">@Model.Appointment.RequesterEmail</a><br />
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Appointment.RequesterPhone))
+                    {
+                        <strong>Téléphone :</strong> <a href="tel:@Model.Appointment.RequesterPhone">@Model.Appointment.RequesterPhone</a>
+                    }
+                </p>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Appointment.Message))
+        {
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h5>Message</h5>
+                    <p>@Model.Appointment.Message</p>
+                </div>
+            </div>
+        }
+
+        @if (Model.Appointment.ClientId.HasValue)
+        {
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h5>Client associé</h5>
+                    <p>@Model.Appointment.ClientName</p>
+                </div>
+            </div>
+        }
+
+        <div class="row mt-3">
+            <div class="col-12 text-muted small">
+                Demandé le @Model.Appointment.CreatedAt.ToString("g")
+                @if (Model.Appointment.UpdatedAt != Model.Appointment.CreatedAt)
+                {
+                    <span>| Mis à jour le @Model.Appointment.UpdatedAt.ToString("g")</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Appointment.Status == "Pending")
+    {
+        <div class="card-footer">
+            <form method="post" asp-page-handler="Accept" class="d-inline">
+                <button type="submit" class="btn btn-success">Accepter</button>
+            </form>
+            <form method="post" asp-page-handler="Refuse" class="d-inline" onsubmit="return confirm('Refuser cette demande ?');">
+                <button type="submit" class="btn btn-danger">Refuser</button>
+            </form>
+        </div>
+    }
+</div>
+
+<div>
+    <a asp-page="Index" class="btn btn-outline-secondary">Retour à la liste</a>
+</div>

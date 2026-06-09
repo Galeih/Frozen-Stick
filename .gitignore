@@ -1,0 +1,78 @@
+.aider*
+
+# Build
+bin/
+obj/
+out/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docobj
+*.ncb
+*.opendb
+*.VC.db
+*.VC.VC.opendb
+
+# Rider / JetBrains
+.idea/
+*.DotSettings.user
+
+# VS Code
+.vscode/
+
+# ASP.NET Core
+**/appsettings.Production.json
+**/appsettings.Staging.json
+
+# Secrets utilisateur (dotnet user-secrets)
+**/secrets.json
+**/*.secrets.json
+
+# Logs
+logs/
+*.log
+
+# Uploads (fichiers générés en dev)
+**/wwwroot/uploads/
+
+# Entity Framework migrations snapshot (garder les migrations, ignorer le snapshot si besoin)
+# Décommente si tu veux ignorer le snapshot :
+# **/Migrations/*ModelSnapshot.cs
+
+# NuGet
+*.nupkg
+**/packages/
+!**/packages/build/
+nuget.config
+
+# Tests
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Publish
+**/publish/
+**/PublishProfiles/
+
+# Docker
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Excel d'import (ne pas versionner les fichiers de données)
+**/Import/*.xlsx
+**/Import/*.xls

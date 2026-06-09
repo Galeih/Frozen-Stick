@@ -1,0 +1,32 @@
+@page "/contenus/{slug}"
+@model Pierre.Web.Pages.Public.Contents.DetailModel
+@{
+    ViewData["Title"] = Model.Article?.Title ?? "Contenu introuvable";
+}
+
+@if (Model.Article == null)
+{
+    <div class="alert alert-warning">Contenu introuvable.</div>
+}
+else
+{
+    <article>
+        <div class="mb-3">
+            <span class="badge bg-secondary">@Model.Article.Type</span>
+            @if (Model.Article.PublishedAt.HasValue)
+            {
+                <span class="text-muted ms-2">Publié le @Model.Article.PublishedAt.Value.ToString("dddd dd MMMM yyyy", new System.Globalization.CultureInfo("fr-FR"))</span>
+            }
+        </div>
+
+        <h1 class="mb-4">@Model.Article.Title</h1>
+
+        <div class="content-body">
+            @Html.Raw(Model.Article.Body)
+        </div>
+
+        <div class="mt-4">
+            <a asp-page="Index" class="btn btn-outline-primary">Retour aux contenus</a>
+        </div>
+    </article>
+}

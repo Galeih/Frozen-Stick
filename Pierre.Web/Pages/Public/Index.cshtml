@@ -1,0 +1,120 @@
+@page
+@model Pierre.Web.Pages.Public.IndexModel
+@{
+    ViewData["Title"] = "Accueil";
+}
+
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="hero-title mb-3">Un accompagnement personnalisé vers une alimentation équilibrée</h1>
+                <p class="hero-subtitle mb-4">
+                    Diététicien-nutritionniste diplômé, je vous aide à adopter une alimentation saine et durable,
+                    adaptée à vos besoins et à votre rythme de vie.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a asp-page="/Public/Booking/Request" class="btn btn-accent btn-lg rounded-pill px-4">Prendre rendez-vous</a>
+                    <a asp-page="/Public/Presentation" class="btn btn-outline-green btn-lg rounded-pill px-4">En savoir plus</a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                <div class="hero-image bg-green-light d-inline-flex align-items-center justify-content-center" style="width: 300px; height: 300px; border-radius: 50%;">
+                    <span class="text-primary-green fw-bold" style="font-size: 1.2rem;">Photo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="section-title">À propos</h2>
+                <p class="section-subtitle mt-2">
+                    Fort de plusieurs années d'expérience en cabinet et à l'hôpital, je propose un suivi
+                    personnalisé pour vous aider à atteindre vos objectifs nutritionnels. Mon approche
+                    bienveillante et sans restriction vous accompagne vers un mieux-être durable.
+                </p>
+                <a asp-page="/Public/Presentation" class="btn btn-primary-green rounded-pill px-4 mt-2">Découvrir mon parcours</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-beige">
+    <div class="container">
+        <h2 class="section-title text-center">Mes prestations</h2>
+        <p class="section-subtitle text-center mb-5">Un accompagnement adapté à chaque situation</p>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card service-card p-4">
+                    <span class="service-icon">🥗</span>
+                    <h5 class="fw-bold">Consultation individuelle</h5>
+                    <p class="text-muted small">Bilan nutritionnel complet et suivi personnalisé pour atteindre vos objectifs santé.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card service-card p-4">
+                    <span class="service-icon">👨‍👩‍👧‍👦</span>
+                    <h5 class="fw-bold">Accompagnement familial</h5>
+                    <p class="text-muted small">Des conseils adaptés à toute la famille pour adopter de bonnes habitudes alimentaires.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card service-card p-4">
+                    <span class="service-icon">🍳</span>
+                    <h5 class="fw-bold">Ateliers cuisine</h5>
+                    <p class="text-muted small">Apprenez à cuisiner équilibré avec des recettes simples, savoureuses et de saison.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-page="/Public/Services" class="btn btn-primary-green rounded-pill px-4">Voir toutes les prestations</a>
+        </div>
+    </div>
+</section>
+
+@if (Model.LatestContents.Count > 0)
+{
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center">Derniers articles</h2>
+            <p class="section-subtitle text-center mb-5">Retrouvez mes conseils et recettes</p>
+
+            <div class="row g-4">
+                @foreach (var content in Model.LatestContents)
+                {
+                    <div class="col-md-4">
+                        <div class="card content-card">
+                            <div class="card-body">
+                                <span class="badge bg-secondary mb-2">@content.Type</span>
+                                <h5 class="card-title">@content.Title</h5>
+                                @if (content.PublishedAt.HasValue)
+                                {
+                                    <p class="card-text text-muted small">Publié le @content.PublishedAt.Value.ToString("dd/MM/yyyy")</p>
+                                }
+                                <a asp-page="/Public/Contents/Detail" asp-route-slug="@content.Slug" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="text-center mt-4">
+                <a asp-page="/Public/Contents/Index" class="btn btn-primary-green rounded-pill px-4">Voir tous les articles</a>
+            </div>
+        </div>
+    </section>
+}
+
+<section class="cta-section">
+    <div class="container">
+        <h2 class="cta-title mb-3">Prêt à prendre soin de votre alimentation ?</h2>
+        <p class="mb-4" style="font-size: 1.1rem;">Prenez rendez-vous dès maintenant pour une première consultation.</p>
+        <a asp-page="/Public/Booking/Request" class="btn btn-light btn-lg rounded-pill px-5 fw-bold" style="color: var(--green-dark);">Prendre rendez-vous</a>
+    </div>
+</section>

@@ -1,0 +1,67 @@
+@using Microsoft.AspNetCore.Identity
+@using Pierre.Web.Domain.Entities
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Pierre Diététicien</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Pierre.Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="d-flex" style="min-height: 100vh;">
+        <nav class="bg-dark text-white d-flex flex-column flex-shrink-0 p-3" style="width: 250px;">
+            <a asp-page="/Admin/Dashboard" class="d-flex align-items-center mb-3 text-white text-decoration-none">
+                <strong>Pierre Diététicien</strong>
+            </a>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a asp-page="/Admin/Dashboard" class="nav-link text-white">Tableau de bord</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/Admin/Clients/Index" class="nav-link text-white">Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/Admin/Appointments/Index" class="nav-link text-white">Rendez-vous</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/Admin/Contents/Index" class="nav-link text-white">Contenus</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/Admin/Planning/Index" class="nav-link text-white">Planning</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/Admin/AdminTracking/Index" class="nav-link text-white">Suivi administratif</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/Admin/Import/Index" class="nav-link text-white">Import</a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="d-flex flex-column flex-grow-1">
+            <header class="bg-white border-bottom px-4 py-2 d-flex justify-content-end align-items-center">
+                <span class="me-3">@UserManager.GetUserName(User)</span>
+                <form method="post" asp-page="/Admin/Logout" class="m-0">
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">Déconnexion</button>
+                </form>
+            </header>
+
+            <main class="p-4 flex-grow-1">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

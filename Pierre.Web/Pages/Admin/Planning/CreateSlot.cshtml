@@ -1,0 +1,48 @@
+@page
+@model Pierre.Web.Pages.Admin.Planning.CreateSlotModel
+@{
+    ViewData["Title"] = "Nouveau créneau";
+}
+
+<h1>Nouveau créneau</h1>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label asp-for="Input.Date" class="form-label">Date</label>
+            <input asp-for="Input.Date" type="date" class="form-control" />
+            <span asp-validation-for="Input.Date" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="Input.StartTime" class="form-label">Début</label>
+            <input asp-for="Input.StartTime" type="time" class="form-control" />
+            <span asp-validation-for="Input.StartTime" class="text-danger"></span>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Input.EndTime" class="form-label">Fin</label>
+            <input asp-for="Input.EndTime" type="time" class="form-control" />
+            <span asp-validation-for="Input.EndTime" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="form-check">
+                <input asp-for="Input.IsBlocked" class="form-check-input" />
+                <label asp-for="Input.IsBlocked" class="form-check-label">Créneau bloqué (indisponible)</label>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Créer le créneau</button>
+    <a asp-page="Index" class="btn btn-outline-secondary">Annuler</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

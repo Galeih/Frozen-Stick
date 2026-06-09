@@ -1,0 +1,86 @@
+@page
+@model Pierre.Web.Pages.Admin.Contents.IndexModel
+@{
+    ViewData["Title"] = "Gestion des contenus";
+}
+
+<h1>Gestion des contenus</h1>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a asp-page="Create" class="btn btn-primary">Nouveau contenu</a>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <select name="TypeFilter" asp-items="Model.TypeOptions" class="form-select">
+            <option value="">Tous les types</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <select name="StatusFilter" asp-items="Model.StatusOptions" class="form-select">
+            <option value="">Tous les statuts</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-secondary">Filtrer</button>
+    </div>
+</form>
+
+@if (Model.Contents.Count == 0)
+{
+    <p class="text-muted">Aucun contenu trouvé.</p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Type</th>
+                <th>Statut</th>
+                <th>Dernière modification</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var content in Model.Contents)
+            {
+                <tr>
+                    <td>@content.Title</td>
+                    <td><span class="badge bg-secondary">@content.Type</span></td>
+                    <td>
+                        @if (content.Status == "Published")
+                        {
+                            <span class="badge bg-success">Publié</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Brouillon</span>
+                        }
+                    </td>
+                    <td>@content.UpdatedAt.ToString("g")</td>
+                    <td>
+                        <a asp-page="Edit" asp-route-id="@content.Id" class="btn btn-sm btn-outline-primary">Modifier</a>
+
+                        @if (content.Status == "Published")
+                        {
+                            <form method="post" asp-page-handler="Unpublish" asp-route-id="@content.Id" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-warning">Dépublier</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-page-handler="Publish" asp-route-id="@content.Id" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-success">Publier</button>
+                            </form>
+                        }
+
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@content.Id" class="d-inline" onsubmit="return confirm('Supprimer ce contenu ?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

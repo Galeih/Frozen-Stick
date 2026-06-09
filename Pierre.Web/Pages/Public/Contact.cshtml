@@ -1,0 +1,91 @@
+@page
+@model Pierre.Web.Pages.Public.ContactModel
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1>Contact</h1>
+        <p class="text-muted mt-2" style="font-size: 1.05rem;">N'hésitez pas à me contacter pour toute question</p>
+    </div>
+</div>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-5">
+                <h3 class="fw-bold mb-4" style="color: var(--green-dark);">Mes coordonnées</h3>
+
+                <div class="mb-4">
+                    <h6 class="fw-bold">Téléphone</h6>
+                    <a href="tel:+33123456789" class="text-decoration-none">01 23 45 67 89</a>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="fw-bold">Email</h6>
+                    <a href="mailto:contact@pierre-dieteticien.fr" class="text-decoration-none">contact@pierre-dieteticien.fr</a>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="fw-bold">Adresse</h6>
+                    <p class="mb-0">12 Rue de l'Alimentation</p>
+                    <p>75001 Paris</p>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="fw-bold">Réseaux sociaux</h6>
+                    <div class="d-flex gap-3 mt-2">
+                        <a href="#" class="btn btn-outline-green rounded-pill btn-sm">Facebook</a>
+                        <a href="#" class="btn btn-outline-green rounded-pill btn-sm">Instagram</a>
+                        <a href="#" class="btn btn-outline-green rounded-pill btn-sm">LinkedIn</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h6 class="fw-bold">Horaires d'ouverture</h6>
+                    <ul class="list-unstyled small">
+                        <li>Lundi - Vendredi : 9h - 19h</li>
+                        <li>Samedi : 9h - 12h</li>
+                        <li>Dimanche : Fermé</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <h3 class="fw-bold mb-4" style="color: var(--green-dark);">Envoyer un message</h3>
+
+                @if (Model.MessageSent)
+                {
+                    <div class="alert alert-success">Votre message a bien été envoyé. Je vous répondrai dans les plus brefs délais.</div>
+                }
+
+                <form method="post">
+                    <div class="mb-3">
+                        <label asp-for="Input.Name" class="form-label">Nom</label>
+                        <input asp-for="Input.Name" class="form-control" />
+                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label">Email</label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Message" class="form-label">Message</label>
+                        <textarea asp-for="Input.Message" class="form-control" rows="6"></textarea>
+                        <span asp-validation-for="Input.Message" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-green rounded-pill px-4">Envoyer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

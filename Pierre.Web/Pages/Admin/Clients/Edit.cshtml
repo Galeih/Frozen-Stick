@@ -1,0 +1,60 @@
+@page "{id:guid}"
+@model Pierre.Web.Pages.Admin.Clients.EditModel
+@{
+    ViewData["Title"] = "Modifier le client";
+}
+
+<h1>Modifier le client</h1>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label asp-for="Input.LastName" class="form-label">Nom</label>
+            <input asp-for="Input.LastName" class="form-control" />
+            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Input.FirstName" class="form-label">Prénom</label>
+            <input asp-for="Input.FirstName" class="form-control" />
+            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label asp-for="Input.Email" class="form-label">Email</label>
+            <input asp-for="Input.Email" class="form-control" type="email" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Input.Phone" class="form-label">Téléphone</label>
+            <input asp-for="Input.Phone" class="form-control" type="tel" />
+            <span asp-validation-for="Input.Phone" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="Input.BirthDate" class="form-label">Date de naissance</label>
+            <input asp-for="Input.BirthDate" class="form-control" type="date" />
+            <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <label asp-for="Input.Notes" class="form-label">Notes</label>
+            <textarea asp-for="Input.Notes" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Input.Notes" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-page="Detail" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Annuler</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
