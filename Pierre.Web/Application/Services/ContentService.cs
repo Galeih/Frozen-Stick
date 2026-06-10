@@ -12,11 +12,13 @@ namespace Pierre.Web.Application.Services;
 public class ContentService
 {
     private readonly IContentRepository _repository;
+    private readonly AuditService _auditService;
     private readonly ILogger<ContentService> _logger;
 
-    public ContentService(IContentRepository repository, ILogger<ContentService> logger)
+    public ContentService(IContentRepository repository, AuditService auditService, ILogger<ContentService> logger)
     {
         _repository = repository;
+        _auditService = auditService;
         _logger = logger;
     }
 
@@ -135,6 +137,7 @@ public class ContentService
         await _repository.UpdateAsync(content);
 
         _logger.LogInformation("Content published: {Title}", content.Title);
+        _auditService.Log("Contenu publié", $"{content.Title} (ID: {content.Id})");
     }
 
     public async Task UnpublishAsync(Guid id)
@@ -152,6 +155,7 @@ public class ContentService
         await _repository.UpdateAsync(content);
 
         _logger.LogInformation("Content unpublished: {Title}", content.Title);
+        _auditService.Log("Contenu dépublié", $"{content.Title} (ID: {content.Id})");
     }
 
     public async Task DeleteAsync(Guid id)

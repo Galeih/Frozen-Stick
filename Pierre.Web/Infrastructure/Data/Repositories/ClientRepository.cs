@@ -19,6 +19,7 @@ public class ClientRepository : IClientRepository
             .Include(c => c.Appointments)
                 .ThenInclude(a => a.Slot)
             .Include(c => c.ConsultationNotes)
+            .Include(c => c.Invoices)
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 

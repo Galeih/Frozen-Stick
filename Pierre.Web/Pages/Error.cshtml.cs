@@ -8,8 +8,8 @@ namespace Pierre.Web.Pages;
 [IgnoreAntiforgeryToken]
 public class ErrorModel : PageModel
 {
+    public int HttpStatusCode { get; set; }
     public string? RequestId { get; set; }
-
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
     private readonly ILogger<ErrorModel> _logger;
@@ -19,9 +19,14 @@ public class ErrorModel : PageModel
         _logger = logger;
     }
 
-    public void OnGet()
+    public void OnGet(int? statusCode)
     {
+        HttpStatusCode = statusCode ?? 0;
         RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
+        if (HttpStatusCode > 0)
+        {
+            _logger.LogWarning("Page error {StatusCode} for {Path}", HttpStatusCode, Request.Path);
+        }
     }
 }
-

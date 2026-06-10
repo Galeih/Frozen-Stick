@@ -1,26 +1,31 @@
-﻿@page
-@model ErrorModel
+﻿@page "{statusCode?}"
+@model Pierre.Web.Pages.ErrorModel
 @{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = "Erreur";
+    var layout = Request.Path.StartsWithSegments("/Admin") ? "~/Pages/Admin/_AdminLayout.cshtml" : "~/Pages/Shared/_PublicLayout.cshtml";
+    Layout = layout;
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<div class="container py-5 text-center">
+    <h1 class="display-1 text-muted">@(Model.HttpStatusCode > 0 ? Model.HttpStatusCode.ToString() : "Erreur")</h1>
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+    @if (Model.HttpStatusCode == 404)
+    {
+        <h2 class="text-danger">Page introuvable</h2>
+        <p class="text-muted">La page que vous recherchez n'existe pas ou a été déplacée.</p>
+    }
+    else if (Model.HttpStatusCode == 403)
+    {
+        <h2 class="text-danger">Accès refusé</h2>
+        <p class="text-muted">Vous n'avez pas les droits pour accéder à cette page.</p>
+    }
+    else
+    {
+        <h2 class="text-danger">Une erreur est survenue</h2>
+        <p class="text-muted">Une erreur inattendue s'est produite. Veuillez réessayer plus tard.</p>
+    }
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to the <strong>Development</strong> environment displays detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+    <a href="@(Request.Path.StartsWithSegments("/Admin") ? "/Admin/Dashboard" : "/")" class="btn btn-primary mt-3">
+        @(Request.Path.StartsWithSegments("/Admin") ? "Retour au tableau de bord" : "Retour à l'accueil")
+    </a>
+</div>

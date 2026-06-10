@@ -56,6 +56,21 @@ public class AppointmentRepository : IAppointmentRepository
             .ToListAsync();
     }
 
+    public async Task<List<Appointment>> GetUpcomingAcceptedAsync(int count)
+    {
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        return await _context.Appointments
+            .Include(a => a.Slot)
+            .Include(a => a.Client)
+            .Where(a => a.Status == AppointmentStatus.Accepted)
+            .Where(a => a.Slot.Date >= today)
+            .OrderBy(a => a.Slot.Date)
+            .ThenBy(a => a.Slot.StartTime)
+            .Take(count)
+            .ToListAsync();
+    }
+
     public async Task AddAsync(Appointment appointment)
     {
         await _context.Appointments.AddAsync(appointment);

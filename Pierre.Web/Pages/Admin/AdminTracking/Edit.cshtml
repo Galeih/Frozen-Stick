@@ -1,0 +1,60 @@
+@page "{id:guid}"
+@model Pierre.Web.Pages.Admin.AdminTracking.EditModel
+@{
+    ViewData["Title"] = "Modifier l'entrée";
+}
+
+<h1>Modifier l'entrée administrative</h1>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Client</label>
+            <input class="form-control" value="@Model.ClientName" readonly />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Input.Reference" class="form-label">Référence</label>
+            <input asp-for="Input.Reference" class="form-control" />
+            <span asp-validation-for="Input.Reference" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label asp-for="Input.Amount" class="form-label">Montant (€)</label>
+            <input asp-for="Input.Amount" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="Input.Amount" class="text-danger"></span>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Input.Status" class="form-label">Statut</label>
+            <select asp-for="Input.Status" class="form-select">
+                <option value="Pending">En attente</option>
+                <option value="Paid">Payée</option>
+                <option value="Cancelled">Annulée</option>
+            </select>
+            <span asp-validation-for="Input.Status" class="text-danger"></span>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Input.IssuedAt" class="form-label">Date</label>
+            <input asp-for="Input.IssuedAt" class="form-control" type="date" />
+            <span asp-validation-for="Input.IssuedAt" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <label asp-for="Input.Notes" class="form-label">Notes</label>
+            <textarea asp-for="Input.Notes" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Input.Notes" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-page="Index" class="btn btn-outline-secondary">Annuler</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,67 @@
+@page "{id:guid}"
+@model Pierre.Web.Pages.Admin.ConsultationNotes.DetailModel
+@{
+    ViewData["Title"] = "Note de consultation";
+}
+
+<h1>Note de consultation</h1>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Note du @Model.Note.Date.ToString("dd/MM/yyyy")</span>
+        <a asp-page="/Admin/Clients/Detail" asp-route-id="@Model.Note.ClientId" class="btn btn-sm btn-outline-primary">
+            Voir la fiche client
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <strong>Client :</strong> @Model.Note.ClientName<br />
+                <strong>Date :</strong> @Model.Note.Date.ToString("dddd dd MMMM yyyy")<br />
+                @if (!string.IsNullOrEmpty(Model.Note.AppointmentInfo))
+                {
+                    <strong>Rendez-vous associé :</strong> @Model.Note.AppointmentInfo<br />
+                }
+                @if (Model.Note.Weight.HasValue)
+                {
+                    <strong>Poids :</strong> @(Model.Note.Weight.Value.ToString("F1"))<text> kg</text><br />
+                }
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <h5>Contenu</h5>
+                <p>@Model.Note.Content</p>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Note.Recommendations))
+        {
+            <div class="row mb-3">
+                <div class="col-12">
+                    <h5>Recommandations</h5>
+                    <p>@Model.Note.Recommendations</p>
+                </div>
+            </div>
+        }
+
+        <div class="text-muted small">
+            Créée le @Model.Note.CreatedAt.ToString("g")
+            @if (Model.Note.UpdatedAt != Model.Note.CreatedAt)
+            {
+                <span>| Modifiée le @Model.Note.UpdatedAt.ToString("g")</span>
+            }
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <a asp-page="Edit" asp-route-id="@Model.Note.Id" class="btn btn-primary">Modifier</a>
+    </div>
+</div>
+
+<div>
+    <a asp-page="/Admin/Clients/Detail" asp-route-id="@Model.Note.ClientId" class="btn btn-outline-secondary">
+        Retour à la fiche client
+    </a>
+</div>

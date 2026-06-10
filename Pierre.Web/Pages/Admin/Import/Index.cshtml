@@ -1,0 +1,36 @@
+@page
+@model Pierre.Web.Pages.Admin.Import.IndexModel
+@{
+    ViewData["Title"] = "Import Excel";
+}
+
+<h1>Import de clients depuis Excel</h1>
+
+@if (TempData["Error"] is string errorMsg)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @errorMsg
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card">
+    <div class="card-body text-center py-5">
+        <p class="text-muted mb-4">
+            Sélectionnez un fichier Excel (.xlsx) contenant les colonnes :
+            <strong>Prénom</strong>, <strong>Nom</strong>, Email, Téléphone, Date de naissance.
+        </p>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <input asp-for="Upload" class="form-control form-control-lg" accept=".xlsx" style="max-width: 400px; margin: 0 auto;" />
+                <span asp-validation-for="Upload" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Analyser le fichier</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

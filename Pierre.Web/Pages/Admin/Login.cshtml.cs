@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Pierre.Web.Application.Services;
 using Pierre.Web.Domain.Entities;
 
 namespace Pierre.Web.Pages.Admin;
@@ -11,13 +12,16 @@ namespace Pierre.Web.Pages.Admin;
 public class LoginModel : PageModel
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly AuditService _auditService;
     private readonly ILogger<LoginModel> _logger;
 
     public LoginModel(
         SignInManager<ApplicationUser> signInManager,
+        AuditService auditService,
         ILogger<LoginModel> logger)
     {
         _signInManager = signInManager;
+        _auditService = auditService;
         _logger = logger;
     }
 
@@ -43,9 +47,11 @@ public class LoginModel : PageModel
         if (result.Succeeded)
         {
             _logger.LogInformation("Connexion réussie pour {Email}", Input.Email);
+            _auditService.Log("Connexion réussie", Input.Email);
             return RedirectToPage("/Admin/Dashboard");
         }
 
+        _auditService.Log("Échec de connexion", Input.Email);
         ErrorMessage = "Email ou mot de passe incorrect.";
         return Page();
     }

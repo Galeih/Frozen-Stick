@@ -7,6 +7,7 @@ using Pierre.Web.Domain.Entities;
 using Pierre.Web.Infrastructure.Data;
 using Pierre.Web.Infrastructure.Data.Repositories;
 using Pierre.Web.Infrastructure.Email;
+using Pierre.Web.Infrastructure.Import;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -57,9 +58,16 @@ try
     builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
     builder.Services.AddScoped<IClientRepository, ClientRepository>();
     builder.Services.AddScoped<IEmailService, SmtpEmailService>();
+    builder.Services.AddScoped<IConsultationNoteRepository, ConsultationNoteRepository>();
+    builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+    builder.Services.AddScoped<IExcelImportService, ExcelImportService>();
     builder.Services.AddScoped<ContentService>();
     builder.Services.AddScoped<ClientService>();
+    builder.Services.AddScoped<ConsultationNoteService>();
     builder.Services.AddScoped<AppointmentService>();
+    builder.Services.AddScoped<InvoiceService>();
+    builder.Services.AddScoped<DashboardService>();
+    builder.Services.AddScoped<AuditService>();
     builder.Services.AddScoped<DatabaseSeeder>();
     builder.Services.AddScoped<DataSeeder>();
 
@@ -93,8 +101,22 @@ try
     {
         app.UseExceptionHandler("/Error");
     }
+    else
+    {
+        app.UseDeveloperExceptionPage();
+    }
+
+    app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
     app.UseStaticFiles();
+
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+        context.Response.Headers.Append("X-Frame-Options", "DENY");
+        await next();
+    });
+
     app.UseRouting();
     app.UseAuthentication();
     app.UseAuthorization();

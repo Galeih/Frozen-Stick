@@ -4,5 +4,136 @@
     ViewData["Title"] = "Tableau de bord";
 }
 
-<h1>Tableau de bord</h1>
-<p>Bienvenue sur votre espace d'administration.</p>
+<div class="container-fluid px-0">
+    <h1 class="mb-4">Tableau de bord</h1>
+
+    <div class="row g-4">
+        @* Widget : Demandes en attente *@
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Demandes en attente</h5>
+                    <a asp-page="/Admin/Appointments/Index" asp-route-status="Pending" class="btn btn-sm btn-outline-primary">Voir tout</a>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <span class="display-4 fw-bold text-warning">@Model.Dashboard.PendingRequestsCount</span>
+                        <p class="text-muted mb-0">demande(s) en attente</p>
+                    </div>
+                    @if (Model.Dashboard.RecentPendingRequests.Count > 0)
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var req in Model.Dashboard.RecentPendingRequests)
+                            {
+                                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@req.RequesterName</strong><br />
+                                        <small class="text-muted">@req.Date.ToString("dd/MM/yyyy") à @req.StartTime.ToString("hh\\:mm")</small>
+                                    </div>
+                                    <a asp-page="/Admin/Appointments/Detail" asp-route-id="@req.Id" class="btn btn-sm btn-outline-secondary">Voir</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">Aucune demande en attente.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @* Widget : Prochains rendez-vous *@
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Prochains rendez-vous</h5>
+                    <a asp-page="/Admin/Appointments/Index" class="btn btn-sm btn-outline-primary">Voir tout</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.Dashboard.UpcomingAppointments.Count > 0)
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var apt in Model.Dashboard.UpcomingAppointments)
+                            {
+                                <li class="list-group-item px-0">
+                                    <strong>@apt.RequesterName</strong><br />
+                                    <small class="text-muted">@apt.Date.ToString("dd/MM/yyyy") à @apt.StartTime.ToString("hh\\:mm")</small>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">Aucun rendez-vous à venir.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @* Widget : Derniers clients *@
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Derniers clients</h5>
+                    <a asp-page="/Admin/Clients/Index" class="btn btn-sm btn-outline-primary">Voir tout</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.Dashboard.RecentClients.Count > 0)
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var client in Model.Dashboard.RecentClients)
+                            {
+                                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@client.FullName</strong><br />
+                                        <small class="text-muted">Ajouté le @client.CreatedAt.ToString("dd/MM/yyyy")</small>
+                                    </div>
+                                    <a asp-page="/Admin/Clients/Detail" asp-route-id="@client.Id" class="btn btn-sm btn-outline-secondary">Voir</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">Aucun client.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @* Widget : Derniers contenus *@
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Derniers contenus</h5>
+                    <a asp-page="/Admin/Contents/Index" class="btn btn-sm btn-outline-primary">Voir tout</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.Dashboard.RecentContents.Count > 0)
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var content in Model.Dashboard.RecentContents)
+                            {
+                                <li class="list-group-item px-0">
+                                    <strong>@content.Title</strong><br />
+                                    <small class="text-muted">
+                                        @(content.Type == "Article" ? "Article" : "Recette")
+                                        @if (content.PublishedAt.HasValue)
+                                        {
+                                            @:- Publié le @content.PublishedAt.Value.ToString("dd/MM/yyyy")
+                                        }
+                                    </small>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">Aucun contenu publié.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

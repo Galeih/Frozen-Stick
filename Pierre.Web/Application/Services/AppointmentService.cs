@@ -15,6 +15,7 @@ public class AppointmentService
     private readonly IClientRepository _clientRepository;
     private readonly IEmailService _emailService;
     private readonly IOptions<AdminSeedSettings> _adminSettings;
+    private readonly AuditService _auditService;
     private readonly ILogger<AppointmentService> _logger;
 
     public AppointmentService(
@@ -23,6 +24,7 @@ public class AppointmentService
         IClientRepository clientRepository,
         IEmailService emailService,
         IOptions<AdminSeedSettings> adminSettings,
+        AuditService auditService,
         ILogger<AppointmentService> logger)
     {
         _availabilityRepository = availabilityRepository;
@@ -30,6 +32,7 @@ public class AppointmentService
         _clientRepository = clientRepository;
         _emailService = emailService;
         _adminSettings = adminSettings;
+        _auditService = auditService;
         _logger = logger;
     }
 
@@ -170,6 +173,7 @@ public class AppointmentService
         }
 
         _logger.LogInformation("Appointment {Id} accepted for {Name}", appointment.Id, appointment.RequesterName);
+        _auditService.Log("Rendez-vous accepté", $"{appointment.RequesterName} le {appointment.Slot.Date:yyyy-MM-dd} à {appointment.Slot.StartTime:hh\\:mm}");
 
         if (!string.IsNullOrWhiteSpace(appointment.RequesterEmail))
         {
@@ -211,6 +215,7 @@ Pierre Diététicien";
         await _appointmentRepository.UpdateAsync(appointment);
 
         _logger.LogInformation("Appointment {Id} refused for {Name}", appointment.Id, appointment.RequesterName);
+        _auditService.Log("Rendez-vous refusé", $"{appointment.RequesterName} le {appointment.Slot.Date:yyyy-MM-dd} à {appointment.Slot.StartTime:hh\\:mm}");
 
         if (!string.IsNullOrWhiteSpace(appointment.RequesterEmail))
         {

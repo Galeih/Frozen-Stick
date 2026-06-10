@@ -15,6 +15,16 @@ public class ClientDetailDto
     public int AppointmentCount { get; set; }
     public List<ClientAppointmentDto> Appointments { get; set; } = new();
     public List<ClientNoteDto> ConsultationNotes { get; set; } = new();
+    public List<ClientInvoiceDto> Invoices { get; set; } = new();
+}
+
+public class ClientInvoiceDto
+{
+    public Guid Id { get; set; }
+    public string Reference { get; set; } = string.Empty;
+    public decimal Amount { get; set; }
+    public string Status { get; set; } = string.Empty;
+    public DateOnly IssuedAt { get; set; }
 }
 
 public class ClientAppointmentDto

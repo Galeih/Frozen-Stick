@@ -9,6 +9,7 @@ public interface IAppointmentRepository
     Task<Appointment?> GetBySlotIdAsync(Guid slotId);
     Task<List<Appointment>> GetAllAsync(AppointmentStatus? statusFilter = null);
     Task<List<Appointment>> GetPendingAsync();
+    Task<List<Appointment>> GetUpcomingAcceptedAsync(int count);
     Task AddAsync(Appointment appointment);
     Task UpdateAsync(Appointment appointment);
 }

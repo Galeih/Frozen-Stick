@@ -20,6 +20,7 @@ public class AppointmentServiceTests
     private readonly Mock<IOptions<AdminSeedSettings>> _adminSettingsMock;
     private readonly Mock<ILogger<AppointmentService>> _loggerMock;
     private readonly AppointmentService _service;
+    private static readonly AuditService AuditServiceStub = new(Mock.Of<ILogger<AuditService>>());
 
     public AppointmentServiceTests()
     {
@@ -50,6 +51,7 @@ public class AppointmentServiceTests
             _clientRepoMock.Object,
             _emailServiceMock.Object,
             _adminSettingsMock.Object,
+            AuditServiceStub,
             _loggerMock.Object);
     }
 

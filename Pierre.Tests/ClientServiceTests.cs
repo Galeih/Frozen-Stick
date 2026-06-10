@@ -13,12 +13,13 @@ public class ClientServiceTests
     private readonly Mock<IClientRepository> _repositoryMock;
     private readonly Mock<ILogger<ClientService>> _loggerMock;
     private readonly ClientService _service;
+    private static readonly AuditService AuditServiceStub = new(Mock.Of<ILogger<AuditService>>());
 
     public ClientServiceTests()
     {
         _repositoryMock = new Mock<IClientRepository>();
         _loggerMock = new Mock<ILogger<ClientService>>();
-        _service = new ClientService(_repositoryMock.Object, _loggerMock.Object);
+        _service = new ClientService(_repositoryMock.Object, AuditServiceStub, _loggerMock.Object);
     }
 
     [Fact]

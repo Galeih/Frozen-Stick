@@ -122,12 +122,16 @@
     </div>
 }
 
-@if (Model.Client.ConsultationNotes.Count > 0)
-{
-    <div class="card mb-4">
-        <div class="card-header">
-            <h5 class="mb-0">Notes de consultation (@Model.Client.ConsultationNotes.Count)</h5>
-        </div>
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Notes de consultation (@Model.Client.ConsultationNotes.Count)</h5>
+        <a asp-page="/Admin/ConsultationNotes/Create" asp-route-clientId="@Model.Client.Id" class="btn btn-sm btn-primary">
+            Ajouter une note
+        </a>
+    </div>
+
+    @if (Model.Client.ConsultationNotes.Count > 0)
+    {
         <div class="card-body p-0">
             <table class="table table-hover mb-0">
                 <thead>
@@ -136,6 +140,7 @@
                         <th>Contenu</th>
                         <th>Recommandations</th>
                         <th>Poids</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -143,9 +148,59 @@
                     {
                         <tr>
                             <td>@note.Date.ToString("dd/MM/yyyy")</td>
-                            <td>@note.Content</td>
+                            <td>@(note.Content.Length > 100 ? note.Content[..100] + "..." : note.Content)</td>
                             <td>@(note.Recommendations ?? "-")</td>
                             <td>@(note.Weight.HasValue ? note.Weight.Value.ToString("F1") + " kg" : "-")</td>
+                            <td>
+                                <a asp-page="/Admin/ConsultationNotes/Detail" asp-route-id="@note.Id" class="btn btn-sm btn-outline-primary">Voir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="card-body">
+            <p class="text-muted mb-0">Aucune note de consultation. <a asp-page="/Admin/ConsultationNotes/Create" asp-route-clientId="@Model.Client.Id">Ajouter une note</a>.</p>
+        </div>
+    }
+</div>
+
+@if (Model.Client.Invoices.Count > 0)
+{
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Factures (@Model.Client.Invoices.Count)</h5>
+            <a asp-page="/Admin/AdminTracking/Index" class="btn btn-sm btn-outline-primary">Voir tout</a>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Référence</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var inv in Model.Client.Invoices)
+                    {
+                        <tr>
+                            <td>@inv.Reference</td>
+                            <td>@inv.Amount.ToString("F2") €</td>
+                            <td>
+                                <span class="badge @(inv.Status switch
+                                {
+                                    "Paid" => "bg-success",
+                                    "Pending" => "bg-warning text-dark",
+                                    "Cancelled" => "bg-secondary",
+                                    _ => "bg-info"
+                                })">@inv.Status</span>
+                            </td>
+                            <td>@inv.IssuedAt.ToString("dd/MM/yyyy")</td>
                         </tr>
                     }
                 </tbody>

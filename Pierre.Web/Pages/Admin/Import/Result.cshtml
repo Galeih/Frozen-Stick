@@ -1,0 +1,42 @@
+@page
+@model Pierre.Web.Pages.Admin.Import.ResultModel
+@{
+    ViewData["Title"] = "Rapport d'import";
+}
+
+<h1>Rapport d'import</h1>
+
+<div class="card border-success mb-4">
+    <div class="card-header bg-success text-white">
+        Import terminé
+    </div>
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col-3">
+                <div class="display-6 fw-bold text-primary">@Model.Report.TotalRows</div>
+                <div class="text-muted">Lignes totales</div>
+            </div>
+            <div class="col-3">
+                <div class="display-6 fw-bold text-success">@Model.Report.ValidCount</div>
+                <div class="text-muted">Valides</div>
+            </div>
+            <div class="col-3">
+                <div class="display-6 fw-bold text-danger">@Model.Report.ErrorCount</div>
+                <div class="text-muted">Erreurs</div>
+            </div>
+            <div class="col-3">
+                <div class="display-6 fw-bold text-success">@Model.Report.ImportedCount</div>
+                <div class="text-muted">Importés</div>
+            </div>
+        </div>
+        <hr />
+        <p class="mb-1"><strong>Fichier :</strong> @Model.Report.FileName</p>
+        <p class="mb-1"><strong>Statut :</strong> <span class="badge bg-success">@Model.Report.Status</span></p>
+        <p class="mb-0"><strong>Importé le :</strong> @Model.Report.ImportedAt.ToString("dd/MM/yyyy à HH:mm")</p>
+    </div>
+</div>
+
+<div class="d-flex gap-2">
+    <a asp-page="Index" class="btn btn-primary">Importer un autre fichier</a>
+    <a asp-page="/Admin/Clients/Index" class="btn btn-outline-secondary">Voir la liste des clients</a>
+</div>

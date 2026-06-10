@@ -8,11 +8,13 @@ namespace Pierre.Web.Application.Services;
 public class ClientService
 {
     private readonly IClientRepository _repository;
+    private readonly AuditService _auditService;
     private readonly ILogger<ClientService> _logger;
 
-    public ClientService(IClientRepository repository, ILogger<ClientService> logger)
+    public ClientService(IClientRepository repository, AuditService auditService, ILogger<ClientService> logger)
     {
         _repository = repository;
+        _auditService = auditService;
         _logger = logger;
     }
 
@@ -70,6 +72,7 @@ public class ClientService
         await _repository.AddAsync(client);
 
         _logger.LogInformation("Client created: {Id} - {FirstName} {LastName}", client.Id, client.FirstName, client.LastName);
+        _auditService.Log("Client créé", $"{client.FirstName} {client.LastName} (ID: {client.Id})");
 
         return await GetByIdAsync(client.Id);
     }
@@ -94,6 +97,7 @@ public class ClientService
         await _repository.UpdateAsync(client);
 
         _logger.LogInformation("Client updated: {Id} - {FirstName} {LastName}", client.Id, client.FirstName, client.LastName);
+        _auditService.Log("Client modifié", $"{client.FirstName} {client.LastName} (ID: {client.Id})");
 
         return await GetByIdAsync(client.Id);
     }
@@ -110,6 +114,7 @@ public class ClientService
         await _repository.ArchiveAsync(id);
 
         _logger.LogInformation("Client archived: {Id} - {FirstName} {LastName}", id, client.FirstName, client.LastName);
+        _auditService.Log("Client archivé", $"{client.FirstName} {client.LastName} (ID: {id})");
     }
 
     private static ClientListItemDto MapToListItem(Client client)
@@ -161,6 +166,16 @@ public class ClientService
                     Content = n.Content,
                     Recommendations = n.Recommendations,
                     Weight = n.Weight
+                }).ToList(),
+            Invoices = (client.Invoices ?? new List<Invoice>())
+                .OrderByDescending(i => i.IssuedAt)
+                .Select(i => new ClientInvoiceDto
+                {
+                    Id = i.Id,
+                    Reference = i.Reference,
+                    Amount = i.Amount,
+                    Status = i.Status.ToString(),
+                    IssuedAt = i.IssuedAt
                 }).ToList()
         };
     }
