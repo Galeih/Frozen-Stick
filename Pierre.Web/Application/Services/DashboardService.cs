@@ -22,20 +22,14 @@ public class DashboardService
 
     public async Task<DashboardDto> GetDashboardAsync()
     {
-        var upcomingAppointmentsTask = _appointmentRepository.GetUpcomingAcceptedAsync(5);
-        var pendingAppointmentsTask = _appointmentRepository.GetPendingAsync();
-        var recentClientsTask = _clientRepository.GetAllActiveAsync();
-        var recentContentsTask = _contentRepository.GetPublishedAsync();
-
-        await Task.WhenAll(
-            upcomingAppointmentsTask,
-            pendingAppointmentsTask,
-            recentClientsTask,
-            recentContentsTask);
+        var upcomingAppointments = await _appointmentRepository.GetUpcomingAcceptedAsync(5);
+        var pendingAppointments = await _appointmentRepository.GetPendingAsync();
+        var recentClients = await _clientRepository.GetAllActiveAsync();
+        var recentContents = await _contentRepository.GetPublishedAsync();
 
         var dto = new DashboardDto
         {
-            UpcomingAppointments = upcomingAppointmentsTask.Result
+            UpcomingAppointments = upcomingAppointments
                 .Select(a => new DashboardAppointmentDto
                 {
                     Id = a.Id,
@@ -45,9 +39,9 @@ public class DashboardService
                     CreatedAt = a.CreatedAt
                 }).ToList(),
 
-            PendingRequestsCount = pendingAppointmentsTask.Result.Count,
+            PendingRequestsCount = pendingAppointments.Count,
 
-            RecentPendingRequests = pendingAppointmentsTask.Result
+            RecentPendingRequests = pendingAppointments
                 .OrderByDescending(a => a.CreatedAt)
                 .Take(5)
                 .Select(a => new DashboardAppointmentDto
@@ -59,7 +53,7 @@ public class DashboardService
                     CreatedAt = a.CreatedAt
                 }).ToList(),
 
-            RecentClients = recentClientsTask.Result
+            RecentClients = recentClients
                 .OrderByDescending(c => c.CreatedAt)
                 .Take(3)
                 .Select(c => new DashboardClientDto
@@ -70,7 +64,7 @@ public class DashboardService
                     CreatedAt = c.CreatedAt
                 }).ToList(),
 
-            RecentContents = recentContentsTask.Result
+            RecentContents = recentContents
                 .OrderByDescending(c => c.PublishedAt)
                 .Take(3)
                 .Select(c => new DashboardContentDto
