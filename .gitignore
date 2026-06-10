@@ -24,12 +24,16 @@ out/
 .vscode/
 
 # ASP.NET Core
+**/appsettings.Development.json
 **/appsettings.Production.json
 **/appsettings.Staging.json
+**/appsettings.*.json
+!**/appsettings.json
 
 # Secrets utilisateur (dotnet user-secrets)
 **/secrets.json
 **/*.secrets.json
+%APPDATA%/Microsoft/UserSecrets/
 
 # Logs
 logs/
@@ -60,6 +64,12 @@ coverage/
 
 # Docker
 .dockerignore
+docker-compose.override.yml
+
+# Variables d'environnement
+.env
+.env.*
+!.env.example
 
 # OS
 .DS_Store
@@ -76,3 +86,14 @@ desktop.ini
 # Excel d'import (ne pas versionner les fichiers de données)
 **/Import/*.xlsx
 **/Import/*.xls
+
+# Fichiers générés (rapports, exports)
+**/wwwroot/exports/
+**/wwwroot/reports/
+
+# Clés et certificats
+*.pfx
+*.p12
+*.key
+*.pem
+*.cer
